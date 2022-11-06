@@ -10,16 +10,3 @@ object Printable {
   def print[A](value: A)(implicit printable: Printable[A]): Unit =
     println(format(value))
 }
-
-object PrintableInstances {
-  implicit val stringPrintable: Printable[String] = new Printable[String] {
-
-    override def format(value: String): String = value
-
-  }
-  implicit val intPrintable: Printable[Int] = new Printable[Int] {
-
-    override def format(value: Int): String = value.toString
-
-  }
-}

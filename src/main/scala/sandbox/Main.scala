@@ -6,6 +6,7 @@ import json.JsonWriter
 import json.JsonSyntax._
 import json.JsonWriterInstances._
 import printable.Printable
+import printable.PrintableSyntax._
 
 object Main extends App {
   println("Hello " |+| "Cats!")
@@ -22,4 +23,5 @@ object Main extends App {
 
   val cat = Cat("Kasmi", 1, "striped")
   Printable.print(cat)
+  cat.print
 }
