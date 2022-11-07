@@ -12,6 +12,8 @@ import cats.Show
 import cats.syntax.show._
 // import cats.instances.int._
 import java.util.Date
+import cats.kernel.Eq
+import cats.syntax.eq._
 
 object Main extends App {
   // println("Hello " |+| "Cats!")
@@ -39,4 +41,14 @@ object Main extends App {
     Show.show(x => s"${x.getTime}ms since the epoch.")
   println(new Date().show)
   println(cat.show)
+
+  val cat1 = Cat("Garfield",   38, "orange and black")
+  val cat2 = Cat("Heathcliff", 33, "orange and black")
+  val optionCat1 = Option(cat1)
+  val optionCat2 = Option.empty[Cat]
+
+  println(cat1 === cat1)
+  println(Eq.eqv(cat1 ,cat2))
+  println(optionCat1 =!= optionCat2)
+  println(optionCat1 === Option(cat1))
 }

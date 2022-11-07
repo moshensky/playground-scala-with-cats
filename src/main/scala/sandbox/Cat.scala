@@ -2,6 +2,7 @@ package sandbox
 import printable.PrintableInstances._
 import printable.Printable
 import cats.Show
+import cats.kernel.Eq
 
 final case class Cat(name: String, age: Int, color: String)
 
@@ -25,4 +26,8 @@ object Cat {
     val color = showStr.show(cat.color)
     s"${name} is a ${age} old ${color} cat."
   })
+
+  implicit val eqCat: Eq[Cat] = Eq.instance[Cat] { (a, b) =>
+    Eq.eqv(a.name, b.name) && Eq.eqv(a.age, b.age) && Eq.eqv(a.color, b.color)
+  }
 }
