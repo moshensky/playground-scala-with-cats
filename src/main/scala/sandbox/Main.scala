@@ -13,7 +13,6 @@ import cats.syntax.show._
 // import cats.instances.int._
 import java.util.Date
 
-
 object Main extends App {
   // println("Hello " |+| "Cats!")
   val dave = Person("Dave", "dave@example.com")
@@ -36,6 +35,8 @@ object Main extends App {
   println(showInt.show(7))
   println(showStr.show("xxx"))
 
-  implicit val dateShow0: Show[Date] = Show.show(x => s"${x.getTime}ms since the epoch.")
+  implicit val dateShow0: Show[Date] =
+    Show.show(x => s"${x.getTime}ms since the epoch.")
   println(new Date().show)
+  println(cat.show)
 }
