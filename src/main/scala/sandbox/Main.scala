@@ -42,13 +42,13 @@ object Main extends App {
   println(new Date().show)
   println(cat.show)
 
-  val cat1 = Cat("Garfield",   38, "orange and black")
+  val cat1 = Cat("Garfield", 38, "orange and black")
   val cat2 = Cat("Heathcliff", 33, "orange and black")
   val optionCat1 = Option(cat1)
   val optionCat2 = Option.empty[Cat]
 
   println(cat1 === cat1)
-  println(Eq.eqv(cat1 ,cat2))
+  println(Eq.eqv(cat1, cat2))
   println(optionCat1 =!= optionCat2)
   println(optionCat1 === Option(cat1))
 }
