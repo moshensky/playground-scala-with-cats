@@ -1,6 +1,5 @@
 package sandbox
 
-// import cats.implicits._
 import json.Json
 import json.JsonWriter
 import json.JsonSyntax._
@@ -10,7 +9,7 @@ import printable.PrintableSyntax._
 
 import cats.Show
 import cats.syntax.show._
-// import cats.instances.int._
+import cats.syntax.option._
 import java.util.Date
 import cats.kernel.Eq
 import cats.syntax.eq._
@@ -51,4 +50,6 @@ object Main extends App {
   println(Eq.eqv(cat1, cat2))
   println(optionCat1 =!= optionCat2)
   println(optionCat1 === Option(cat1))
+
+  println(1.some === none[Int])
 }
