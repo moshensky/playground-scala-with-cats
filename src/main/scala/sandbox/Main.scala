@@ -14,6 +14,15 @@ import java.util.Date
 import cats.kernel.Eq
 import cats.syntax.eq._
 
+trait Monad[F[_]] {
+  def pure[A](a: A): F[A] 
+  def flatMap[A, B](value: F[A])(func: A => F[B]): F[B]
+  def map[A, B](value: F[A])(func: A => B): F[B] = {
+    val xxx = flatMap(value)(x => pure(func(x)))
+    xxx
+  }
+}
+
 object Main extends App {
   // println("Hello " |+| "Cats!")
   val dave = Person("Dave", "dave@example.com")
@@ -52,4 +61,8 @@ object Main extends App {
   println(optionCat1 === Option(cat1))
 
   println(1.some === none[Int])
+
+  // pure(a).flatMap(func) == func(a)
+  // val optionMonad = Monad[Option].pure(1).flatMap()
+
 }

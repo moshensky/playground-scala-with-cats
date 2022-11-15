@@ -3,7 +3,7 @@ import printable.PrintableInstances._
 import printable.Printable
 import cats.syntax.eq._
 import cats.Show
-import cats.kernel.Eq
+import cats.Eq
 
 final case class Cat(name: String, age: Int, color: String)
 
