@@ -9,16 +9,24 @@ class CatsStateSpec extends FunSuite {
     (num :: oldStack, num)
   }
   def someCalculation(f: (Int, Int) => Int): CalcState[Int] = State {
-    case b :: a :: tail => (tail, f(a, b))
-    case _              => ???
+    case b :: a :: tail =>
+      val ans = f(a, b)
+      (ans :: tail, ans)
+    case _ => ???
   }
 
   def evalOne(sym: String): CalcState[Int] = {
     sym match {
       case "+" => someCalculation(_ + _)
+      case "*" => someCalculation(_ * _)
       case x   => someTransformation(x.toInt)
     }
   }
+
+  def evalAll(xs: List[String]): CalcState[Int] =
+    xs.foldLeft(State.pure[List[Int], Int](0)) { (acc, x) =>
+      acc.flatMap(_ => evalOne(x))
+    }
 
   test("State") {
     val step1 = State[Int, String] { num =>
@@ -53,5 +61,25 @@ class CatsStateSpec extends FunSuite {
     } yield ans
 
     assertEquals(program.runA(Nil).value, 3)
+  }
+
+  test("evallAll") {
+    val result = evalAll(List("1", "2", "+", "3", "*"))
+    assertEquals(result.runA(Nil).value, 9)
+  }
+
+  test("evalAll bigger") {
+    val biggerProgram = for {
+      _ <- evalAll(List("1","2","+"))
+      _ <- evalAll(List("3","4","+"))
+      ans <- evalOne("*")
+    } yield ans
+
+    assertEquals(biggerProgram.runA(Nil).value, 21)
+  }
+
+  test("evalInput") {
+    def evalInput(x: String): Int = evalAll(x.split(" ").toList).runA(Nil).value
+    assertEquals(evalInput("1 2 + 2 *"), 6)
   }
 }
