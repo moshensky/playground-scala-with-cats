@@ -1,8 +1,8 @@
 package circe_auto
 
-import org.scalatest.wordspec.AnyWordSpec
 import io.circe.generic.auto._
 import io.circe.parser
+import munit.FunSuite
 
 case class Nested(arrayField: List[Int])
 case class OurJson(
@@ -12,7 +12,7 @@ case class OurJson(
     nestedObject: Nested
 )
 
-class CicrceAutoGenEncSpec extends AnyWordSpec {
+class CicrceAutoGenEncSpec extends FunSuite {
   val jsonString = """
     |{
     | "textField": "textContent",
@@ -24,14 +24,11 @@ class CicrceAutoGenEncSpec extends AnyWordSpec {
     |}
     |""".stripMargin
 
-  "Auto gen enc" when {
-    "using crice" in {
-      val decoded = parser.decode[OurJson](jsonString)
-      assert(
-        decoded === Right(
-          OurJson("textContent", 123, true, Nested(List(1, 2, 3)))
-        )
-      )
-    }
+  test("Auto gen enc") {
+    val decoded = parser.decode[OurJson](jsonString)
+    assertEquals(
+      decoded,
+      Right(OurJson("textContent", 123, true, Nested(List(1, 2, 3))))
+    )
   }
 }

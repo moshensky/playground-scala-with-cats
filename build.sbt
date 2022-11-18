@@ -13,9 +13,8 @@ val CirceVersion = "0.14.1"
 
 libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % CatsVersion,
-  "org.scalactic" %% "scalactic" % "3.2.14",
-  "org.scalatest" %% "scalatest" % "3.2.14" % Test,
   "io.circe" %% "circe-core" % CirceVersion,
   "io.circe" %% "circe-generic" % CirceVersion,
-  "io.circe" %% "circe-parser" % CirceVersion
+  "io.circe" %% "circe-parser" % CirceVersion,
+  "org.scalameta" %% "munit" % "0.7.29" % Test,
 )
