@@ -1,5 +1,6 @@
 import cats.data.State
 import munit.FunSuite
+import cats.Monad
 
 class CatsStateSpec extends FunSuite {
 
@@ -70,8 +71,8 @@ class CatsStateSpec extends FunSuite {
 
   test("evalAll bigger") {
     val biggerProgram = for {
-      _ <- evalAll(List("1","2","+"))
-      _ <- evalAll(List("3","4","+"))
+      _ <- evalAll(List("1", "2", "+"))
+      _ <- evalAll(List("3", "4", "+"))
       ans <- evalOne("*")
     } yield ans
 
@@ -81,5 +82,26 @@ class CatsStateSpec extends FunSuite {
   test("evalInput") {
     def evalInput(x: String): Int = evalAll(x.split(" ").toList).runA(Nil).value
     assertEquals(evalInput("1 2 + 2 *"), 6)
+  }
+
+  test("Monadic retry with stackoverflow") {
+    import cats.syntax.flatMap._
+    def retry[F[_]: Monad, A](start: A)(f: A => F[A]): F[A] = f(start).flatMap {
+      a => retry(a)(f)
+    }
+
+    // TODO: how to intercept stasckoverflow
+    intercept[java.lang.StackOverflowError] {
+      // retry(5997)(a => if (a == 0) None else Some(a - 1))
+      retry(1000)(a => if (a == 0) None else Some(a - 1))
+    }
+  }
+
+  test("Monadic retry with tail recursion") {
+    import cats.syntax.functor._
+    def retryTailRecM[F[_]: Monad, A](start: A)(f: A => F[A]): F[A] =
+      Monad[F].tailRecM(start) { a => f(a).map(a2 => Left(a2)) }
+
+    assertEquals(retryTailRecM(100000)(a => if (a == 0) None else Some(a - 1)), None)
   }
 }
