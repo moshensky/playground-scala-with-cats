@@ -28,7 +28,7 @@ class TestUptimeClient(val hostsMap: Map[String, Int])
 
 }
 
-class TestingAsyncCodeSuite extends FunSuite {
+class Ch8TestingAsyncCodeSuite extends FunSuite {
   test("UptimeService") {
     val hosts = Map("host1" -> 10, "host2" -> 6)
     val client = new TestUptimeClient(hosts)
