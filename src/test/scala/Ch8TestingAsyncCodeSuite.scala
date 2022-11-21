@@ -21,7 +21,7 @@ class RealUptimeClient extends UptimeClient[Future] {
 class TestUptimeClient(val hostsMap: Map[String, Int])
     extends UptimeClient[Id] {
 
-  override def getUptime(hostname: String): Int = hostname match {
+  override def getUptime(hostname: String): Id[Int] = hostname match {
     case "host1" => 10
     case "host2" => 6
   }
