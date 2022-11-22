@@ -9,6 +9,7 @@ import cats.syntax.all._
 trait MyFoldable {
   def foldMap[A, B: Monoid](xs: Vector[A])(f: A => B): B
   def parFoldMap[A, B: Monoid](values: Vector[A])(f: A => B): Future[B]
+  def parFoldMap2[A, B: Monoid](values: Vector[A])(f: A => B): Future[B]
 }
 
 class TestMyFoldable extends MyFoldable {
@@ -19,6 +20,17 @@ class TestMyFoldable extends MyFoldable {
     val cpuCount = Runtime.getRuntime.availableProcessors
     val grouped = values.grouped(cpuCount).toList
     grouped.map(xs => Future(foldMap(xs)(f))).sequence.map(Monoid[B].combineAll)
+  }
+
+  override def parFoldMap2[A, B: Monoid](values: Vector[A])(
+      f: A => B
+  ): Future[B] = {
+    val cpuCount = Runtime.getRuntime.availableProcessors
+    values
+      .grouped(cpuCount)
+      .toVector
+      .traverse(xs => Future(xs.toVector.foldMap(f)))
+      .map(_.combineAll)
   }
 
   override def foldMap[A, B: Monoid](xs: Vector[A])(f: A => B): B = {
